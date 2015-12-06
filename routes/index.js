@@ -52,13 +52,11 @@ router.post('/login', function(req, res, next){
 
 router.post('/api/yelp/:location', function (req, res, next) {
     searchYelp.request_yelp(req.params.location, function(err, response, body) {
-        console.log(req.params.location.toLowerCase());
         Location.find({"location" : req.params.location.toLowerCase()}, function(err, result) {
             
             if(err) { console.log(err); return; }
             
             if(result[0]) {
-                //console.log(result);
                 res.json(result[0]);
             } else {
                 var business = JSON.parse(body).businesses;
@@ -68,7 +66,6 @@ router.post('/api/yelp/:location', function (req, res, next) {
                 
                 business.forEach(function(place) {
                     Bar.find({url: place.url}, function(err, barResult) {
-                        console.log(barResult);
                         if(barResult.length > 0) {
                             location.bars.push(place);
                         } else {

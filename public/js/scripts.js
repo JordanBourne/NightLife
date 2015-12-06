@@ -17,7 +17,10 @@ app.config([
                 resolve: {
                     promise: ['$stateParams', 'yelp', function ($stateParams, yelp) {
                         yelp.getYelp($stateParams.place);
-                    }]
+                    }],
+                    onEnter: function() {
+                        console.log("test123");
+                    }
                 }
             })
         
@@ -32,7 +35,7 @@ app.config([
                 }
             })
         
-            .state('login', {
+            /*.state('login', {
                 url: '/login',
                 templateUrl: '/logIn.html',
                 controller: 'AuthCtrl',
@@ -53,7 +56,7 @@ app.config([
                         $state.go('home');
                     }
                 }]
-            });
+            });*/
         
         $urlRouterProvider.otherwise('/');
     }
@@ -132,7 +135,6 @@ app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     };
     
     o.addOne = function (place) {
-        console.log("running");
         $http.put('/bar/' + place._id, null, {
             headers: {Authorization: 'Bearer ' + auth.getToken()}
         }).success(function (plusMinus) {
@@ -153,12 +155,34 @@ app.controller('MainCtrl', [
     '$scope',
     '$http',
     'yelp',
-    function ($scope, $http, yelp) {
+    'auth',
+    function ($scope, $http, yelp, auth) {
         $scope.searchArea = function () {
             $scope.results = window.location.href = "#/search/" + $scope.place;
             
             $scope.place = '';
         };
+        
+        
+        this.tab = 0;
+        
+        this.setTab = function (tabVal) {
+            if (this.tab === tabVal) {
+                this.tab = 0;
+            } else {
+                this.tab = tabVal;
+            }
+        };
+        
+        this.isSet = function (checkVal) {
+            return this.tab === checkVal;
+        };
+        
+        this.checkLogin = function() {
+            if ($scope.isLoggedIn = auth.isLoggedIn) {
+                this.tab = 0;
+            }
+        }
     }
 ]);
 
@@ -212,22 +236,18 @@ app.controller('AuthCtrl', [
     'auth',
     function($scope, $state, auth){
         $scope.user = {};
+        $scope.success = false;
 
         $scope.register = function(){
             auth.register($scope.user).error(function(error){
                 $scope.error = error;
-            }).then(function(){
-                $state.go('home');
-            });
+            })
         };
 
         $scope.logIn = function(){
             auth.logIn($scope.user).error(function(error){
                 $scope.error = error;
-                console.log(error);
-            }).then(function(){
-                $state.go('home');
-            });
+            })
         };
 }]);
 
@@ -240,3 +260,17 @@ app.controller('NavCtrl', [
         $scope.logOut = auth.logOut;
     }
 ]);
+
+app.directive('logIn', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'logIn.html'
+    };
+});
+
+app.directive('register', function () {
+    return {
+        restrict: 'E',
+        templateUrl: 'register.html'
+    };
+});

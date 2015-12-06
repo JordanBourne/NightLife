@@ -3,21 +3,21 @@
     <head>
         <meta charset="UTF-8">
         <title>Night Life</title>
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
-        <link href='https://fonts.googleapis.com/css?family=Raleway:200|Lato:300|Work+Sans:300' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Raleway:200' rel='stylesheet' type='text/css'>
+        <script src="js/jquery-1.11.3.js"></script>
         <script src='js/angular.js'></script>
         <script src="js/angular-ui-router.js"></script>
         <script src="js/scripts.js"></script>
     </head>
-<body ng-app = "app" ng-controller = "MainCtrl">
+<body ng-app = "app" ng-controller = "MainCtrl as main">
     <div class = "backgroundImage"></div>
     
     <section class = "welcome">
         
         <div class = "header" ng-controller="NavCtrl">
-            <div ng-hide = "isLoggedIn()" class = "headButton loginout" ng-click = "hideMe = 1"><a href  = "#/login">Log In</a></div>
-            <div ng-hide = "isLoggedIn()" class = "headButton register" ng-click = "hideMe = 1"><a href  = "#/register">Register</a></div>
+            <div ng-hide = "isLoggedIn()" class = "headButton loginout" ng-click = "main.setTab(1)"><a href ng-click = "tab.setTab(1)">Log In</a></div>
+            <div ng-hide = "isLoggedIn()" class = "headButton register"><a href ng-click = "main.setTab(2)">Register</a></div>
             <div ng-show = "isLoggedIn()" class = "headButton loginout"><a href  = "" ng-click = "logOut()">Log Out</a></div>
         </div>
         
@@ -31,6 +31,8 @@
         </div>
     </section>
     
+    <log-in ng-show = "main.isSet(1)"></log-in>
+    <register ng-show = "main.isSet(2)"></register>
 
     <ui-view></ui-view>
     

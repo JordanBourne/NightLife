@@ -1,4 +1,4 @@
-<section class = "results">
+<section class = "results" id = "results">
     <div ng-repeat = "place in results" class = "resultContainer">
         <div class = "resultsList">
             <div class = "placeImg"><img src = "{{place.image_url}}" alt = "{{place.name}}"/></div>
@@ -7,9 +7,9 @@
                     <a href = "{{place.url}}">{{place.name}}</a> <img src = "{{place.rating_img_url}}" /></div>
                 <div class = "placeSnippet">{{place.snippet_text}}</div>
             </div>
-            <div class = "letsGo">{{place.going}} Going 
-                <button class = "placeGo" ng-click = "plusOne(place, $index)" ng-show = "attend($index)">Not Going</button>
-                <button class = "placeGo" ng-click = "plusOne(place, $index)" ng-hide = "attend($index)">Let's Go!</button>
+            <div class = "areyouGoing">{{place.going}} Going 
+                <button class = "placeGo notGo" ng-click = "plusOne(place, $index)" ng-show = "attend($index)">Not Going</button>
+                <button class = "placeGo letsGo" ng-click = "plusOne(place, $index)" ng-hide = "attend($index)">Let's Go!</button>
             </div>
         </div>
         <div class = "divider" ng-hide="$last"></div>

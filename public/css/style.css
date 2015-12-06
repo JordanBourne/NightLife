@@ -3,8 +3,6 @@ html, body {
     min-width: 600px;
     margin: 0px;
     padding: 0px;
-    
-    font-family: 'Quicksand', sans-serif;
 }
 
 a, a:hover, a:visited, a:active {
@@ -150,7 +148,7 @@ a, a:hover, a:visited, a:active {
     margin-bottom: 0px;
 }
 
-.letsGo {
+.areyouGoing {
     font-size:16px;
     text-align: right;
 }
@@ -158,14 +156,28 @@ a, a:hover, a:visited, a:active {
 .placeGo{
     font-size:16px;
     background: none;
-    border: 2px solid #DF790D;
+    border: 2px solid;
     padding: 4px;
-    color: #DF790D;
     transition: all .3s ease;
 }
 
+.letsGo {
+    color: #1E8024;
+    border-color: #1E8024;
+}
+
+.notGo {
+    color: #A32926;
+    border-color: #A32926;
+}
+
 .placeGo:hover {
-    background-color: #DF790D;
+    background-color: #1E8024;
+    color: white;
+}
+
+.notGo:hover {
+    background-color: #A32926;
     color: white;
 }
 
@@ -181,22 +193,20 @@ a, a:hover, a:visited, a:active {
 
 .logInRegister {
     position: fixed;
-    height: 100%;
-    width: 100%;
-    min-width: 600px;
-    z-index: 0;
-    top: 0;
-    left: 0;
+    width: 240px;
+    top: 20px;
+    right: 20px;
     color: black;
+    background-color: white;
+    border-radius: 30px;
+    border: 1px solid black;
     font-family: 'Raleway', sans-serif;
     margin: 50px 0px 50px 0px;
+    text-align: center;
+    z-index: 500;
 }
 
 .loginDisplay {
-    background-color: white;
-    border-radius: 30px;
-    width: 50%;
-    top: 45%;
     margin: 0 auto;
     padding: 20px 0px 20px 0px;
     font-size: 40px;

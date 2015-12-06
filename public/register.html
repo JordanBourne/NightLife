@@ -1,11 +1,11 @@
-<section class = "logInRegister">
-    <div class = "loginDisplay center">
+<section class = "logInRegister" ng-controller = "AuthCtrl">
+    <div class = "loginDisplay">
         Register
         <form ng-submit = "register()">
             <input class = "outline" type="text" id="displayName" placeholder="Display Name" ng-model = "user.username" required></input></br>
             <input class = "outline" type="password" id = "password" placeholder = "Password" ng-model = "user.password" minlength = "5" required></input></br>
             <input class = "outline" type="password" id = "confirmPassword" placeholder = "Confirm Password" required></input></br>
-            <input class = "smallOutline submitPoll" type="submit" value = "Register"></input>
+            <input class = "smallOutline submitPoll" type="submit" value = "Register" ng-click = "main.checkLogin()"></input>
         </form>
     </div>
 </section>
