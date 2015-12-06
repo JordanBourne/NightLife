@@ -1,5 +1,5 @@
 <section class = "results" id = "results">
-    <div ng-repeat = "place in results" class = "resultContainer">
+    <div ng-repeat = "place in results track by $index | limitTo: 10" class = "resultContainer">
         <div class = "resultsList">
             <div class = "placeImg"><img src = "{{place.image_url}}" alt = "{{place.name}}"/></div>
             <div class = "placeAbout">

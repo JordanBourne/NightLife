@@ -17,10 +17,7 @@ app.config([
                 resolve: {
                     promise: ['$stateParams', 'yelp', function ($stateParams, yelp) {
                         yelp.getYelp($stateParams.place);
-                    }],
-                    onEnter: function() {
-                        console.log("test123");
-                    }
+                    }]
                 }
             })
         
