@@ -57,6 +57,7 @@ router.post('/api/yelp/:location', function (req, res, next) {
             if(err) { console.log(err); return; }
             
             if(result[0]) {
+                console.log(result);
                 res.json(result[0]);
             } else {
                 var business = JSON.parse(body).businesses;
@@ -67,7 +68,8 @@ router.post('/api/yelp/:location', function (req, res, next) {
                 business.forEach(function(place) {
                     Bar.find({url: place.url}, function(err, barResult) {
                         if(barResult.length > 0) {
-                            location.bars.push(place);
+                            console.log(place.id);
+                            location.bars.push(place.id);
                         } else {
                             var bar = new Bar();
                             
@@ -76,9 +78,11 @@ router.post('/api/yelp/:location', function (req, res, next) {
                             bar.url = place.url;
                             bar.image_url = place.image_url;
                             bar.snippet_text = place.snippet_text;
+                            bar.id = place.id;
                             
                             if(location.bars.indexOf(bar) < 0 ) {
-                                location.bars.push(bar);
+                                console.log(bar.id);
+                                location.bars.push(bar.id);
                             }
                             bar.save();
                         }
@@ -100,20 +104,21 @@ router.post('/api/yelp/:location', function (req, res, next) {
 router.get('/barList/:location', function (req, res, next) {
     Location.findOne({"location" : req.params.location.toLowerCase()}, function(err, result) {
         var barList = [];
-                result.bars.forEach(function(barID) {
-                Bar.findOne({_id: barID}, function(err, barInfo) {
-                    barList.push(barInfo);
+        console.log(result.bars);
+        result.bars.forEach(function(barID) {
+            Bar.findOne({id: barID}, function(err, barInfo) {
+                barList.push(barInfo);
                     
-                    if(barList.length === 10) {
-                        res.json(barList);
-                    }
-                });
+                if(barList.length === 10) {
+                    res.json(barList);
+                }
             });
+        });
     });
 });
 
 router.put('/bar/:id', auth, function(req, res, next) {
-    Bar.findOne({_id : req.params.id}, function(err, result) {
+    Bar.findOne({id : req.params.id}, function(err, result) {
     
         var atNum = result.people.indexOf(req.payload.username)
         var wasFound;

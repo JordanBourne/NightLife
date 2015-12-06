@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var LocationSchema = new mongoose.Schema({
     location: String,
-    bars: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Bar' }]
+    bars: [{type: String}]
 });
 
 mongoose.model('Location', LocationSchema);

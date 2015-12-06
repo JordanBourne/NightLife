@@ -7,7 +7,8 @@ var BarSchema = new mongoose.Schema({
     image_url: String,
     snippet_text: String,
     people: [{type: String}],
-    going: {type: Number, default: 0}
+    going: {type: Number, default: 0},
+    id: String
 });
 
 BarSchema.methods.checkNum = function (cb) {

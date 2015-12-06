@@ -132,7 +132,7 @@ app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     };
     
     o.addOne = function (place) {
-        $http.put('/bar/' + place._id, null, {
+        $http.put('/bar/' + place.id, null, {
             headers: {Authorization: 'Bearer ' + auth.getToken()}
         }).success(function (plusMinus) {
             if(plusMinus === "true") {
