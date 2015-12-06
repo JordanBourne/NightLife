@@ -188,8 +188,9 @@ app.controller('NightLifeCtrl', [
     'yelp',
     'auth',
     function ($scope, yelp, auth) {
-        if(yelp.places.data) {
+        if(yelp.bars) {
             var attendanceIndex = [];
+            console.log(yelp.bars);
             
             yelp.bars.forEach(function(bar) {
                 if (bar.people.indexOf(auth.currentUser()) < 0) {
