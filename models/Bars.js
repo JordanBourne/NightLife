@@ -6,11 +6,12 @@ var BarSchema = new mongoose.Schema({
     url: String,
     image_url: String,
     snippet_text: String,
+    people: [{type: String}],
     going: {type: Number, default: 0}
 });
 
-BarSchema.methods.plusOne = function (cb) {
-    this.going += 1;
+BarSchema.methods.checkNum = function (cb) {
+    this.going = this.people.length;
     this.save(cb);
 }
 

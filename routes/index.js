@@ -1,11 +1,14 @@
 var express = require('express');
+var jwt = require('express-jwt');
 var router = express.Router();
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'})
 var Yelp = require('../controllers/yelp.js');
 var mongoose = require('mongoose');
 
 var searchYelp = new Yelp();
+var passport = require('passport');
 var Bar = mongoose.model('Bar');
+var User = mongoose.model('User');
 var Location = mongoose.model('Location');
 
 /* GET home page. */
@@ -49,8 +52,8 @@ router.post('/login', function(req, res, next){
 
 router.post('/api/yelp/:location', function (req, res, next) {
     searchYelp.request_yelp(req.params.location, function(err, response, body) {
-        
-        Location.find({"location" : req.params.location}, function(err, result) {
+        console.log(req.params.location.toLowerCase());
+        Location.find({"location" : req.params.location.toLowerCase()}, function(err, result) {
             
             if(err) { console.log(err); return; }
             
@@ -61,10 +64,11 @@ router.post('/api/yelp/:location', function (req, res, next) {
                 var business = JSON.parse(body).businesses;
                 var location = new Location();
                 
-                location.location = req.params.location;
+                location.location = req.params.location.toLowerCase();
                 
                 business.forEach(function(place) {
                     Bar.find({url: place.url}, function(err, barResult) {
+                        console.log(barResult);
                         if(barResult.length > 0) {
                             location.bars.push(place);
                         } else {
@@ -97,26 +101,37 @@ router.post('/api/yelp/:location', function (req, res, next) {
 });
 
 router.get('/barList/:location', function (req, res, next) {
-    Location.find({"location" : req.params.location}, function(err, result) {
+    Location.findOne({"location" : req.params.location.toLowerCase()}, function(err, result) {
         var barList = [];
-        result[0].bars.forEach(function(barID) {
-            Bar.find({_id: barID}, function(err, barInfo) {
-                barList.push(barInfo[0]);
-                
-                if(barList.length === 10) {
-                    res.json(barList);
-                }
+                result.bars.forEach(function(barID) {
+                Bar.findOne({_id: barID}, function(err, barInfo) {
+                    barList.push(barInfo);
+                    
+                    if(barList.length === 10) {
+                        res.json(barList);
+                    }
+                });
             });
-        });
     });
 });
 
-router.put('/bar/:id', function(req, res, next) {
+router.put('/bar/:id', auth, function(req, res, next) {
     Bar.findOne({_id : req.params.id}, function(err, result) {
-        result.plusOne(function(err, bar) {
-            if(err) { return next(err); }
+    
+        var atNum = result.people.indexOf(req.payload.username)
+        var wasFound;
+        if(atNum < 0) {
+            result.people.push(req.payload.username);
+            wasFound = "false";
+        } else {
+            result.people.splice(atNum, 1);
+            wasFound = "true";
+        }
+            
+        result.checkNum(function(err, bar) {
+                if(err) { return next(err); }
         
-            res.json(bar);
+                res.json(wasFound);
         });
     })
 });

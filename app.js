@@ -11,6 +11,7 @@ var passport = require('passport');
 
 require('./models/Bars');
 require('./models/Locations');
+require('./models/Users');
 require('./config/passport');
 
 //mongoose.connect(process.env.MONGOLAB_URI)

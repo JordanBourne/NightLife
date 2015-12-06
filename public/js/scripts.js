@@ -59,7 +59,58 @@ app.config([
     }
 ]);
 
-app.factory('yelp', ['$http', function ($http) {
+app.factory('auth', ['$http', '$window', function($http, $window) {
+    var auth = {};
+    
+    auth.saveToken = function(token) {
+        $window.localStorage['night-token'] = token;
+    };
+    
+    auth.getToken = function() {
+        return $window.localStorage['night-token'];
+    };
+    
+    auth.isLoggedIn = function() {
+        var token = auth.getToken();
+        
+        if (token) {
+            var payload = JSON.parse($window.atob(token.split('.')[1]));
+            
+            return payload.exp > Date.now() / 1000;
+        } else {
+            return false;
+        }
+    };
+    
+    auth.currentUser = function() {
+        if (auth.isLoggedIn()) {
+            var token = auth.getToken();
+            var payload = JSON.parse($window.atob(token.split('.')[1]));
+            
+            return payload.username;
+        }
+    };
+    
+    auth.register = function(user) {
+        return $http.post('/register', user).success(function(data) {
+            auth.saveToken(data.token);
+        });
+    };
+    
+    auth.logIn = function(user) {
+        return $http.post('/login', user).success(function(data) {
+            auth.saveToken(data.token);
+        });
+    };
+    
+    auth.logOut = function() {
+        $window.localStorage.removeItem('night-token');
+    };
+    
+    return auth;
+}]);
+
+app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     var o = {
         places: [],
         bars: []
@@ -68,26 +119,32 @@ app.factory('yelp', ['$http', function ($http) {
     o.getYelp = function (location) {
         $http.post('/api/yelp/' + location)
             .then(function (res) {
-            console.log(res);
                 angular.copy(res, o.places);
                 o.getPlaces(location);
             });
     };
     
-    o.getPlaces = function(location) {
+    o.getPlaces = function (location) {
         $http.get('/barList/' + location).success(function(res) {
             angular.copy(res, o.bars);
             window.location.href = "#/search/" + location + '/' + "results";
-        })
-    }
+        });
+    };
     
     o.addOne = function (place) {
-        $http.put('/bar/' + place._id, null)
-            .success(function (res) {
-            return place.going += 1;
-            console.log(place.going);
-        })
-    }
+        console.log("running");
+        $http.put('/bar/' + place._id, null, {
+            headers: {Authorization: 'Bearer ' + auth.getToken()}
+        }).success(function (plusMinus) {
+            if(plusMinus === "true") {
+                place.people.splice(place.people.indexOf(auth.currentUser), 1);
+                return place.going -= 1; //minus
+            } else {
+                place.people.push(auth.currentUser);
+                return place.going += 1; //plus
+            }
+        });
+    };
     
     return o;
 }]);
@@ -98,8 +155,7 @@ app.controller('MainCtrl', [
     'yelp',
     function ($scope, $http, yelp) {
         $scope.searchArea = function () {
-            $scope.results = 
-                window.location.href = "#/search/" + $scope.place;
+            $scope.results = window.location.href = "#/search/" + $scope.place;
             
             $scope.place = '';
         };
@@ -109,13 +165,78 @@ app.controller('MainCtrl', [
 app.controller('NightLifeCtrl', [
     '$scope',
     'yelp',
-    function ($scope, yelp) {
+    'auth',
+    function ($scope, yelp, auth) {
         if(yelp.places.data) {
+            var attendanceIndex = [];
+            
+            yelp.bars.forEach(function(bar) {
+                if (bar.people.indexOf(auth.currentUser()) < 0) {
+                   attendanceIndex.push(0);
+                } else {
+                   attendanceIndex.push(1);
+                }
+            })
+            
+            $scope.attend = function (num) {
+                if (attendanceIndex[num] == 1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            
             $scope.results = yelp.bars;
             
-            $scope.plusOne = function(place) {
+            $scope.plusOne = function(place, num) {
+                if (!auth.isLoggedIn()) {
+                    $scope.error = 'You must be logged in!';
+                    return;
+                }
+                
                 yelp.addOne(place);
+                
+                if (attendanceIndex[num] == 1) {
+                    return attendanceIndex[num] -= 1;
+                } else {
+                    return attendanceIndex[num] += 1;
+                }
             }
         }
+    }
+]);
+
+app.controller('AuthCtrl', [
+    '$scope',
+    '$state',
+    'auth',
+    function($scope, $state, auth){
+        $scope.user = {};
+
+        $scope.register = function(){
+            auth.register($scope.user).error(function(error){
+                $scope.error = error;
+            }).then(function(){
+                $state.go('home');
+            });
+        };
+
+        $scope.logIn = function(){
+            auth.logIn($scope.user).error(function(error){
+                $scope.error = error;
+                console.log(error);
+            }).then(function(){
+                $state.go('home');
+            });
+        };
+}]);
+
+app.controller('NavCtrl', [
+    '$scope',
+    'auth',
+    function($scope, auth){
+        $scope.isLoggedIn = auth.isLoggedIn;
+        $scope.currentUser = auth.currentUser;
+        $scope.logOut = auth.logOut;
     }
 ]);

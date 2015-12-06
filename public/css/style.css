@@ -55,6 +55,27 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
+.headButton {
+    width: 150px;
+    color: white;
+    position: absolute;
+    text-align: center;
+    font-size: 22px;
+    top: 20px;
+}
+
+.headButton a {
+    color:white;
+}
+
+.loginout {
+    right: 0;
+}
+
+.register {
+    right: 150px;
+}
+
 .letHelp {
     font-size: 50px;
     margin-bottom: 40px;
@@ -156,4 +177,52 @@ a, a:hover, a:visited, a:active {
     width: 90%;
     margin: auto;
     border: 1px solid;
+}
+
+.logInRegister {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    min-width: 600px;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    color: black;
+    font-family: 'Raleway', sans-serif;
+    margin: 50px 0px 50px 0px;
+}
+
+.loginDisplay {
+    background-color: white;
+    border-radius: 30px;
+    width: 50%;
+    top: 45%;
+    margin: 0 auto;
+    padding: 20px 0px 20px 0px;
+    font-size: 40px;
+}
+
+.outline {
+    font-family: 'Raleway', sans-serif;
+    width: 200px;
+    font-size: 20px;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+.outline:focus {
+    outline: none;
+}
+
+.smallOutline {
+    font-family: 'Raleway', sans-serif;
+    width: 100px;
+    font-size: 18px;
+    border: 1px solid black;
+    padding: 2px;
+    background: none;
+}
+
+.smallOutline:focus {
+    outline: none;
 }

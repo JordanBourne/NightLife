@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Jordan Bourne</title>
+        <title>Night Life</title>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style.css">
         <link href='https://fonts.googleapis.com/css?family=Raleway:200|Lato:300|Work+Sans:300' rel='stylesheet' type='text/css'>
@@ -15,7 +15,13 @@
     
     <section class = "welcome">
         
-        <div class = "center">
+        <div class = "header" ng-controller="NavCtrl">
+            <div ng-hide = "isLoggedIn()" class = "headButton loginout" ng-click = "hideMe = 1"><a href  = "#/login">Log In</a></div>
+            <div ng-hide = "isLoggedIn()" class = "headButton register" ng-click = "hideMe = 1"><a href  = "#/register">Register</a></div>
+            <div ng-show = "isLoggedIn()" class = "headButton loginout"><a href  = "" ng-click = "logOut()">Log Out</a></div>
+        </div>
+        
+        <div class = "center" ng-hide = "hideMe == 1">
             <div class = "gOut">Going out tonight?</div>
             <div class = "letHelp">We'll help pick the venue.</div>
             <form ng-submit = "searchArea()">

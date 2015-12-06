@@ -7,7 +7,10 @@
                     <a href = "{{place.url}}">{{place.name}}</a> <img src = "{{place.rating_img_url}}" /></div>
                 <div class = "placeSnippet">{{place.snippet_text}}</div>
             </div>
-            <div class = "letsGo">{{place.going}} Going <button class = "placeGo" ng-click = "plusOne(place)">Let's Go!</button></div>
+            <div class = "letsGo">{{place.going}} Going 
+                <button class = "placeGo" ng-click = "plusOne(place, $index)" ng-show = "attend($index)">Not Going</button>
+                <button class = "placeGo" ng-click = "plusOne(place, $index)" ng-hide = "attend($index)">Let's Go!</button>
+            </div>
         </div>
         <div class = "divider" ng-hide="$last"></div>
     </div>
