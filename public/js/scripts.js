@@ -32,29 +32,6 @@ app.config([
                 }
             })
         
-            /*.state('login', {
-                url: '/login',
-                templateUrl: '/logIn.html',
-                controller: 'AuthCtrl',
-                onEnter: ['$state', 'auth', function ($state, auth) {
-                    if (auth.isLoggedIn()) {
-                        $state.go('home');
-                    }
-                }]
-            })
-            
-        
-            .state('register', {
-                url: '/register',
-                templateUrl: '/register.html',
-                controller: 'AuthCtrl',
-                onEnter: ['$state', 'auth', function ($state, auth) {
-                    if (auth.isLoggedIn()) {
-                        $state.go('home');
-                    }
-                }]
-            });*/
-        
         $urlRouterProvider.otherwise('/');
     }
 ]);
@@ -119,6 +96,7 @@ app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     o.getYelp = function (location) {
         $http.post('/api/yelp/' + location)
             .then(function (res) {
+                console.log(res);
                 angular.copy(res, o.places);
                 o.getPlaces(location);
             });

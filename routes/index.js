@@ -104,7 +104,6 @@ router.post('/api/yelp/:location', function (req, res, next) {
 router.get('/barList/:location', function (req, res, next) {
     Location.findOne({"location" : req.params.location.toLowerCase()}, function(err, result) {
         var barList = [];
-        console.log(result.bars);
         result.bars.forEach(function(barID) {
             Bar.findOne({id: barID}, function(err, barInfo) {
                 barList.push(barInfo);
