@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Jordan Bourne</title>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link href='https://fonts.googleapis.com/css?family=Raleway:200|Lato:300|Work+Sans:300' rel='stylesheet' type='text/css'>
+        <script src='js/angular.js'></script>
+        <script src="js/angular-ui-router.js"></script>
+        <script src="js/scripts.js"></script>
+    </head>
+<body ng-app = "app" ng-controller = "MainCtrl">
+    <div class = "backgroundImage"></div>
+    
+    <section class = "welcome">
+        
+        <div class = "center">
+            <div class = "gOut">Going out tonight?</div>
+            <div class = "letHelp">We'll help pick the venue.</div>
+            <form ng-submit = "searchArea()">
+                <input type = "text" placeholder = "Enter city or zipcode" class = "enterArea" ng-model = "place"/>
+                <input type = "submit" class = "enterButton" value = "Go">
+            </form>
+        </div>
+    </section>
+    
+
+    <ui-view></ui-view>
+    
+
+</body>
+</html>
