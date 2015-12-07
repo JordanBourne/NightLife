@@ -96,7 +96,6 @@ app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     o.getYelp = function (location) {
         $http.post('/api/yelp/' + location)
             .then(function (res) {
-                console.log(res);
                 angular.copy(res, o.places);
                 o.getPlaces(location);
             });
@@ -104,7 +103,6 @@ app.factory('yelp', ['$http', 'auth', function ($http, auth) {
     
     o.getPlaces = function (location) {
         $http.get('/barList/' + location).success(function(res) {
-            console.log(res);
             angular.copy(res, o.bars);
             window.location.href = "#/search/" + location + '/' + "results";
         });
@@ -169,7 +167,6 @@ app.controller('NightLifeCtrl', [
     function ($scope, yelp, auth) {
         if(yelp.bars) {
             var attendanceIndex = [];
-            console.log(yelp.bars);
             
             yelp.bars.forEach(function(bar) {
                 if (bar.people.indexOf(auth.currentUser()) < 0) {

@@ -1,10 +1,10 @@
 <section class = "results">
     <div ng-repeat = "place in results track by $index | limitTo: 10" class = "resultContainer">
         <div class = "resultsList">
-            <div class = "placeImg"><img src = "{{place.image_url}}" alt = "{{place.name}}"/></div>
+            <div class = "placeImg"><img ng-src = "{{place.image_url}}" alt = "{{place.name}}"/></div>
             <div class = "placeAbout">
                 <div class = "placeName">
-                    <a href = "{{place.url}}">{{place.name}}</a> <img src = "{{place.rating_img_url}}" /></div>
+                    <a ng-href = "{{place.url}}">{{place.name}}</a> <img ng-src = "{{place.rating_img_url}}" /></div>
                 <div class = "placeSnippet">{{place.snippet_text}}</div>
             </div>
             <div class = "areyouGoing"><span style = "color: red">{{error}}</span> {{place.going}} Going 
